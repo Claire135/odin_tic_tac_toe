@@ -21,4 +21,8 @@ module GameLogic
       end
     end
   end
+
+  def board_full?
+    @board.board.flatten.all? { |cell| cell != "-" }
+  end
 end
