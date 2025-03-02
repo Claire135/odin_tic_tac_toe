@@ -1,0 +1,20 @@
+# frozen_string_literal: true
+
+# This module handles all UI and processes that require player input.
+# It also handles the errors assoicated with said input.
+
+module PlayerInput
+
+  def place_piece_prompt(current_player, player_piece)
+    loop do
+      puts "#{current_player.name}, pick a number between 1 - 9 to place your #{player_piece}."
+      input = gets.chomp.to_i
+      raise StandardError, 'Please enter either a number between 1 and 9.' unless (1..9).include?(input)
+
+      break
+    rescue StandardError => e
+      puts e.message
+      retry
+    end
+  end
+end
