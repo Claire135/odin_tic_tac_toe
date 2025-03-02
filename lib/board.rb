@@ -1,6 +1,7 @@
+require_relative 'player_input'
 class Board
 
-  include player_input
+  include PlayerInput
 
   def initialize
     @board = [
@@ -10,11 +11,23 @@ class Board
     ]
   end
 
-  def place_piece(current_player, player_piece)
-    position = place_piece_prompt(current_player, player_piece)
-    index = position -1
-    row = index / 3
-    column = index % 3
-    @board[row][column] = player_piece
+  def place_piece(position, player)
+    row = (position - 1) / 3
+    col = (position - 1) % 3
+
+    if @board[row][col].is_a?(Integer)
+      @board[row][col] = player.player_piece
+    else
+      puts "Invalid move! That spot is already taken. Try again."
+      return false  # Return false so the game can ask for a new input
+    end
+  
+    true  # Return true if the move was successful
+  end
+
+  def display_board
+    @board.each do |row|
+      puts row.join(" | ")
+    end
   end
 end
