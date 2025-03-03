@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
 module Rules
-  def self.check_win(player, board)
-    # Flatten the board for easier index checking
-    flat_board = board.board.flatten
+  def check_win(player, board)
+    flat_board = board.flatten.map { |cell| cell.is_a?(String) ? cell.uncolorize : cell } # Strip colorization
     winning_combinations = [
       [0, 1, 2], [3, 4, 5], [6, 7, 8], # Horizontal
       [0, 3, 6], [1, 4, 7], [2, 5, 8], # Vertical

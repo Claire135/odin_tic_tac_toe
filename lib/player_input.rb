@@ -4,11 +4,11 @@
 # It also handles the errors assoicated with said input.
 
 module PlayerInput
-
-  def place_piece_prompt(current_player, player_piece)
+  def place_piece_prompt(current_player)
     loop do
-      puts "#{current_player.name}, pick a number between 1 - 9 to place your #{player_piece}."
+      puts "#{current_player.name}, pick a number between 1 - 9 to place your #{current_player.player_piece}."
       input = gets.chomp.to_i
+      return input if (1..9).include?(input)
       raise StandardError, 'Please enter either a number between 1 and 9.' unless (1..9).include?(input)
 
       break

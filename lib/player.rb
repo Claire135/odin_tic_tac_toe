@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Player
   attr_accessor :score
   attr_reader :name, :player_piece
@@ -12,4 +14,3 @@ class Player
     @score += 1
   end
 end
-
