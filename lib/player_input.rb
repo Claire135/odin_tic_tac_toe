@@ -17,4 +17,15 @@ module PlayerInput
       retry
     end
   end
+
+  def play_again_prompt
+    puts 'Do you want to play again? (y/n)'
+    input = gets.chomp.downcase
+    if input == 'y'
+      GameLauncher.start
+    else
+      puts 'Thanks for playing!'
+      exit
+    end
+  end
 end

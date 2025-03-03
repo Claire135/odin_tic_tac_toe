@@ -14,25 +14,47 @@ class Board
     ]
   end
 
-  def place_piece(position, player)
-    row = (position - 1) / 3
-    col = (position - 1) % 3
-
-    if @board[row][col].is_a?(Integer)
-      @board[row][col] = player.player_piece.colorize(:green) if player.player_piece == 'X'
-      @board[row][col] = player.player_piece.colorize(:magenta) if player.player_piece == 'O'
-    else
-      puts 'Invalid move! That spot is already taken. Try again.'
-      return false # Return false so the game can ask for a new input
-    end
-
-    true # Return true if the move was successful
-  end
-
   def display_board
     @board.each do |row|
       puts row.join(' | ')
     end
     puts ''
+  end
+
+  def board_full?
+    @board.flatten.none? { |cell| cell.is_a?(Integer) }
+  end
+
+  def clear_board
+    @board = [
+      [1, 2, 3],
+      [4, 5, 6],
+      [7, 8, 9]
+    ]
+  end
+
+  def place_piece(position, player)
+    row = (position - 1) / 3
+    col = (position - 1) % 3
+    return invalid_move_message unless valid_move?(row, col)
+
+    @board[row][col] = colored_piece(player)
+    true
+  end
+
+  private
+
+  def valid_move?(row, col)
+    @board[row][col].is_a?(Integer)
+  end
+
+  def colored_piece(player)
+    color = player.player_piece == 'X' ? :green : :magenta
+    player.player_piece.colorize(color)
+  end
+
+  def invalid_move_message
+    puts 'Invalid move! That spot is already taken. Try again.'
+    false
   end
 end

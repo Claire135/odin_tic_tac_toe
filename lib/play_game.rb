@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
+# Handles game flow
+
 require_relative 'player'
 require_relative 'board'
+require_relative 'game_launcher'
 require_relative 'rules'
 require_relative 'displayable'
 require_relative 'player_input'
@@ -19,6 +22,15 @@ class PlayGame
     @current_player = @player1
   end
 
+  def play_game
+    start_game
+    play_round until @round_no == 4 || win_tournament?(@player1, @player2)
+    end_tournament(@player1, @player2)
+    play_again_prompt
+  end
+
+  private
+
   def switch_player
     @current_player = @current_player == @player1 ? @player2 : @player1
   end
@@ -35,22 +47,39 @@ class PlayGame
       @board.display_board
 
       # Check win before switching players
-      if check_win(@current_player, @board.board)
-        @current_player.increment_score
-        end_round_ui(@player1, @player2, @current_player)
-        break
-      end
+      break if game_won_or_tied?
 
       switch_player
     end
   end
 
-  def play_game
-    start_game
-    play_round until @round_no == 3 || win_tournament?(@player1, @player2)
-    end_tournament_ui
+  def game_won_or_tied?
+    if check_win(@current_player, @board.board)
+      handle_win
+      true
+    elsif @board.board_full?
+      handle_tie
+      true
+    else
+      false
+    end
+  end
+
+  def handle_win
+    @current_player.increment_score
+    win_round_ui(@current_player)
+    end_round_ui(@player1, @player2)
+    end_round
+  end
+
+  def handle_tie
+    tied_players_ui
+    end_round_ui(@player1, @player2)
+    end_round
+  end
+
+  def end_round
+    @board.clear_board # Reset the board for the next round
+    @round_no += 1     # Move to the next round
   end
 end
-
-game = PlayGame.new
-game.play_game
